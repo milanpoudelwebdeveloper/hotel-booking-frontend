@@ -10,7 +10,7 @@ const FeaturedProperties = () => {
         {featuredPropertyData.map(
           ({ id, image, name, location, rating, price }) => (
             <div className={styles.fpItem} key={id}>
-              {/* <img src={image} alt={name} className={styles.fpImage} /> */}
+              <img src={image} alt={name} className={styles.fpImage} />
               <span className={styles.fpName}>{name}</span>
               <span className={styles.fpLocation}>{location}</span>
               <span className={styles.fpPrice}> Starting from ${price}</span>
