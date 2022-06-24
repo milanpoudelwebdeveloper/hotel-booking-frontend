@@ -6,6 +6,12 @@ import { FaBed } from 'react-icons/fa'
 import { MdDateRange, MdOutlineEmojiPeople } from 'react-icons/md'
 import styles from './Header.module.css'
 
+interface options {
+  adult: number
+  children: number
+  rooms: number
+}
+
 const SearchSection = () => {
   const [openCalendar, setOpenCalendar] = useState(false)
   const [date, setDate] = useState<Range[]>([
@@ -17,7 +23,7 @@ const SearchSection = () => {
   ])
 
   const [openOptions, setOpenOptions] = useState(false)
-  const [options, setOptions] = useState({
+  const [options, setOptions] = useState<any>({
     adult: 1,
     children: 0,
     rooms: 1,
@@ -25,50 +31,60 @@ const SearchSection = () => {
 
   const { adult, children, rooms } = options
 
-  const handleOptions = (type: string, operation: string) => {
-    if (type === 'adult') {
-      if (operation === 'add') {
-        setOptions((prevState) => ({
-          ...prevState,
-          adult: prevState.adult + 1,
-        }))
-      } else if (operation === 'minus') {
-        if (adult >= 2) {
-          setOptions((prevState) => ({
-            ...prevState,
-            adult: prevState.adult - 1,
-          }))
-        }
-      }
-    } else if (type === 'children') {
-      if (operation === 'add') {
-        setOptions((prevState) => ({
-          ...prevState,
-          children: prevState.children + 1,
-        }))
-      } else if (operation === 'minus') {
-        if (children >= 1) {
-          setOptions((prevState) => ({
-            ...prevState,
-            children: prevState.children - 1,
-          }))
-        }
-      }
-    } else if (type === 'rooms') {
-      if (operation === 'add') {
-        setOptions((prevState) => ({
-          ...prevState,
-          rooms: prevState.rooms + 1,
-        }))
-      } else if (operation === 'minus') {
-        if (rooms >= 2) {
-          setOptions((prevState) => ({
-            ...prevState,
-            rooms: prevState.rooms - 1,
-          }))
-        }
-      }
-    }
+  //my-logic
+  // const handleOption = (type: string, operation: string) => {
+  //   if (type === 'adult') {
+  //     if (operation === 'add') {
+  //       setOptions((prevState) => ({
+  //         ...prevState,
+  //         adult: prevState.adult + 1,
+  //       }))
+  //     } else if (operation === 'minus') {
+  //       if (adult >= 2) {
+  //         setOptions((prevState) => ({
+  //           ...prevState,
+  //           adult: prevState.adult - 1,
+  //         }))
+  //       }
+  //     }
+  //   } else if (type === 'children') {
+  //     if (operation === 'add') {
+  //       setOptions((prevState) => ({
+  //         ...prevState,
+  //         children: prevState.children + 1,
+  //       }))
+  //     } else if (operation === 'minus') {
+  //       if (children >= 1) {
+  //         setOptions((prevState) => ({
+  //           ...prevState,
+  //           children: prevState.children - 1,
+  //         }))
+  //       }
+  //     }
+  //   } else if (type === 'rooms') {
+  //     if (operation === 'add') {
+  //       setOptions((prevState) => ({
+  //         ...prevState,
+  //         rooms: prevState.rooms + 1,
+  //       }))
+  //     } else if (operation === 'minus') {
+  //       if (rooms >= 2) {
+  //         setOptions((prevState) => ({
+  //           ...prevState,
+  //           rooms: prevState.rooms - 1,
+  //         }))
+  //       }
+  //     }
+  //   }
+  // }
+
+  //better-logic but has to do with html buttons
+
+  const handleOption = (name: string, operation: string) => {
+    setOptions((prevState: options) => ({
+      ...prevState,
+      [name]: operation === 'i' ? options[name] + 1 : options[name] - 1,
+    }))
   }
 
   return (
@@ -120,14 +136,15 @@ const SearchSection = () => {
               <div className={styles.counter}>
                 <button
                   className={styles.counterBtn}
-                  onClick={() => handleOptions('adult', 'add')}
+                  onClick={() => handleOption('adult', 'i')}
                 >
                   +
                 </button>
                 <span className={styles.countNumber}>{adult}</span>
                 <button
                   className={styles.counterBtn}
-                  onClick={() => handleOptions('adult', 'minus')}
+                  onClick={() => handleOption('adult', 'd')}
+                  disabled={adult <= 1}
                 >
                   -
                 </button>
@@ -138,14 +155,15 @@ const SearchSection = () => {
               <div className={styles.counter}>
                 <button
                   className={styles.counterBtn}
-                  onClick={() => handleOptions('children', 'add')}
+                  onClick={() => handleOption('children', 'i')}
                 >
                   +
                 </button>
                 <span className={styles.countNumber}>{children}</span>
                 <button
                   className={styles.counterBtn}
-                  onClick={() => handleOptions('children', 'minus')}
+                  onClick={() => handleOption('children', 'd')}
+                  disabled={children < 1}
                 >
                   -
                 </button>
@@ -156,7 +174,7 @@ const SearchSection = () => {
               <div className={styles.counter}>
                 <button
                   className={styles.counterBtn}
-                  onClick={() => handleOptions('rooms', 'add')}
+                  onClick={() => handleOption('rooms', 'i')}
                 >
                   +
                 </button>
@@ -164,8 +182,9 @@ const SearchSection = () => {
                 <button
                   className={styles.counterBtn}
                   onClick={() => {
-                    handleOptions('rooms', 'minus')
+                    handleOption('rooms', 'd')
                   }}
+                  disabled={rooms <= 1}
                 >
                   -
                 </button>

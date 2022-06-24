@@ -122,6 +122,10 @@
   cursor: pointer;
 }
 
+.counterBtn:disabled {
+  cursor: not-allowed;
+}
+
 .countNumber {
   margin: 0px 7px;
 }
