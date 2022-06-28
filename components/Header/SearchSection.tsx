@@ -1,9 +1,13 @@
 import format from 'date-fns/format'
 import moment from 'moment'
+import { useRouter } from 'next/router'
 import React, { useState } from 'react'
-import { DateRangePicker, Range } from 'react-date-range'
+import { DateRangePicker } from 'react-date-range'
 import { FaBed } from 'react-icons/fa'
 import { MdDateRange, MdOutlineEmojiPeople } from 'react-icons/md'
+import { useDispatch } from 'react-redux'
+import { searchQuery } from '../../app/searchSlice'
+
 import styles from './Header.module.css'
 
 interface options {
@@ -13,8 +17,12 @@ interface options {
 }
 
 const SearchSection = () => {
+  const [destination, setDestination] = useState('')
   const [openCalendar, setOpenCalendar] = useState(false)
-  const [date, setDate] = useState<Range[]>([
+  const router = useRouter()
+
+  const dispatch = useDispatch()
+  const [date, setDate] = useState<any>([
     {
       startDate: new Date(),
       endDate: new Date(),
@@ -87,6 +95,16 @@ const SearchSection = () => {
     }))
   }
 
+  const handleSearch = () => {
+    const searchOptions = {
+      destination,
+      date,
+      options,
+    }
+    dispatch(searchQuery(searchOptions))
+    router.push('/search')
+  }
+
   return (
     <div className={styles.headerSearch}>
       <div className={styles.headerSearchItem}>
@@ -95,6 +113,8 @@ const SearchSection = () => {
           type="text"
           placeholder="Where are you going"
           className={styles.searchInput}
+          value={destination}
+          onChange={(e) => setDestination(e.target.value)}
         />
       </div>
       <div className={styles.headerSearchItem}>
@@ -195,7 +215,9 @@ const SearchSection = () => {
       </div>
 
       <div className={styles.headerSearchItem}>
-        <button className={styles.headerBtn}>Search</button>
+        <button className={styles.headerBtn} onClick={handleSearch}>
+          Search
+        </button>
       </div>
     </div>
   )
